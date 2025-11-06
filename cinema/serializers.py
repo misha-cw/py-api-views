@@ -13,11 +13,22 @@ class MovieSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=255)
     description = serializers.CharField()
     duration = serializers.IntegerField()
-    actors = serializers.PrimaryKeyRelatedField(many=True, queryset=Actor.objects.all())
-    genres = serializers.PrimaryKeyRelatedField(many=True, queryset=Genre.objects.all())
+    actors = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Actor.objects.all()
+    )
+    genres = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Genre.objects.all()
+    )
 
     def create(self, validated_data):
-        return Movie.objects.create(**validated_data)
+        movie = Movie.objects.create(
+            title=validated_data["title"],
+            description=validated_data["description"],
+            duration=validated_data["duration"],
+        )
+        movie.actors.set(validated_data["actors"])
+        movie.genres.set(validated_data["genres"])
+        return movie
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get("title", instance.title)
@@ -25,8 +36,12 @@ class MovieSerializer(serializers.Serializer):
             "description", instance.description
         )
         instance.duration = validated_data.get("duration", instance.duration)
-        instance.actors.set(validated_data.get("actors", instance.actors.all()))
-        instance.genres.set(validated_data.get("genres", instance.genres.all()))
+        instance.actors.set(
+            validated_data.get("actors", instance.actors.all())
+        )
+        instance.genres.set(
+            validated_data.get("genres", instance.genres.all())
+        )
 
         instance.save()
 
