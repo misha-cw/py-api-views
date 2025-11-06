@@ -1,6 +1,11 @@
 from rest_framework import serializers
 
-from cinema.models import Movie, Actor, Genre, CinemaHall
+from cinema.models import (
+    Movie,
+    Actor,
+    Genre,
+    CinemaHall,
+)
 
 
 class MovieSerializer(serializers.Serializer):
@@ -24,7 +29,7 @@ class MovieSerializer(serializers.Serializer):
         return instance
 
 
-class ActorSerrializer(serializers.Serializer):
+class ActorSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     first_name = serializers.CharField(max_length=255)
     last_name = serializers.CharField(max_length=255)
