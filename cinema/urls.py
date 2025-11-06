@@ -38,7 +38,7 @@ urlpatterns = [
     path("genres/<int:pk>/", GenreDetail.as_view(), name="genre-detail"),
     path("actors/", ActorList.as_view(), name="actor-list"),
     path("actors/<int:pk>/", ActorDetail.as_view(), name="actor-detail"),
-    path("cinema-halls/", cinema_hall_list, name="cinemahall-list"),
+    path("cinema_halls/", cinema_hall_list, name="cinemahall-list"),
     path(
         "cinema-halls/<int:pk>/",
         cinema_hall_detail,
