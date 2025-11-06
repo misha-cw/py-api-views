@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics, mixins
 from rest_framework.views import APIView
 
 from django.shortcuts import get_object_or_404
@@ -86,3 +86,37 @@ class GenreDetail(APIView):
     def delete(self, request, pk):
         self.get_object(pk).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class ActorList(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    generics.GenericAPIView,
+):
+    queryset = Actor.objects.all()
+    serializer_class = ActorSerrializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+
+class ActorDetail(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView,
+):
+    queryset = Actor.objects.all()
+    serializer_class = ActorSerrializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
